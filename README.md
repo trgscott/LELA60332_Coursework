@@ -15,7 +15,7 @@ This code relates to an assignment on two Named Entity Recognition (NER) tasks (
 <!-- GETTING STARTED -->
 ## Getting Started
 
-All of the code required to run the project is in the CL2_Assignment.ipynb file, which can be run in Colab. A GPU runtime and 2.5GB of GPU RAM is required. The code is currently set up to run in Colab. If you would like to run this on Manchester University GPU nodes you will need to amend the code as noted below and follow the instructions [here](https://livemanchesterac-my.sharepoint.com/:w:/g/personal/dmitry_nikolaev_manchester_ac_uk/EQVPI6GKWN5LsYQoHkFOItAB05Nv6EeRyZDhzuNjFwPcuw):
+All of the code required to run the project is in the CL2_Assignment.ipynb file, which can be run in Colab. A GPU runtime and 18.3GB of GPU RAM is required. The code is currently set up to run in Colab. If you would like to run this on Manchester University GPU nodes you will need to amend the code as noted below and follow the instructions [here](https://livemanchesterac-my.sharepoint.com/:w:/g/personal/dmitry_nikolaev_manchester_ac_uk/EQVPI6GKWN5LsYQoHkFOItAB05Nv6EeRyZDhzuNjFwPcuw):
 
 * Set the devices
   ```sh
