@@ -73,12 +73,27 @@ The code can be run entirely to produce the results for fine-tuning and testing 
   ```
 The code is currently set up to freeze encoder layers 0 and 1 for BERT. If you would prefer not to freeze them, simply comment out this code:
 
-* Experiment with freezing first few layers of the encoder
  ```sh
-  for name, param in encoder.named_parameters():
+ # Experiment with freezing first few layers of the encoder:
+ for name, param in encoder.named_parameters():
     if name.startswith("bert.encoder.layer.0") or name.startswith("bert.encoder.layer.1"):
         param.requires_grad = False
+
+ optimizer_parameters = [param for name, param in encoder.named_parameters()
+    if not (name.startswith("bert.encoder.layer.0") or name.startswith("bert.encoder.layer.1"))
+ ] + list(clf_head.parameters())
   ```
+... and amend the optimizer_parameters in the training code block from:
+
+```sh
+optimiser = torch.optim.AdamW(optimizer_parameters, lr=10**(-5))
+  ```
+to:
+
+```sh
+optimiser = torch.optim.AdamW(list(encoder.parameters()) + list(clf_head.parameters()), lr=10**(-5))
+  ```
+
 The code for T5 is currently set up to use a learning rate of 10^(-4). If you would like to vary this rate, simply amend the lr in the below block of code:
 
 * Encoder-Decoder - T5-Small
