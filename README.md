@@ -10,12 +10,12 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-This code relates to an assignment on two Named Entity Recognition (NER) tasks (tagging seven or three classes) using an encoder-only (BERT-Base) and an encoder-decoder (T5-Small) model. The models are evaluated using span accuracy, per label F1 and macro-F1. Options to freeze the lower layers of the encoder model and vary the learning rates on the encoder-decoder model are highlighted below. The code output currently shows the results for the best performing model options (frozen layers for BERT and 10^(-4) learning rate for T5). All random seeds are set to 42 for reproducibility.
+This code relates to an assignment on two Named Entity Recognition (NER) tasks (tagging seven or three classes) using an encoder-only (BERT-Base) and an encoder-decoder (T5-Small) model. The models are evaluated using span accuracy, per label F1 and macro-F1. Options to freeze the lower layers of the encoder model and vary the learning rates on the encoder-decoder model are highlighted below. The code output currently shows the results for the best performing model options (all layers trained for BERT and 10^(-4) learning rate for T5). All random seeds are set to 42 for reproducibility.
 
 <!-- GETTING STARTED -->
 ## Getting Started
 
-All of the code required to run the project is in the CL2_Assignment.ipynb file, which can be run in Colab. A GPU runtime and 18.3GB of GPU RAM is required. The code is currently set up to run in Colab. If you would like to run this on Manchester University GPU nodes you will need to amend the code as noted below and follow the instructions [here](https://livemanchesterac-my.sharepoint.com/:w:/g/personal/dmitry_nikolaev_manchester_ac_uk/EQVPI6GKWN5LsYQoHkFOItAB05Nv6EeRyZDhzuNjFwPcuw):
+All of the code required to run the project is in the CL2_Assignment.ipynb file, which can be run in Colab. A GPU runtime and 18.3GB of GPU RAM is required. For the exact same results you may need to run on the L4 GPU on Colab though it can be run on others. The code is currently set up to run in Colab. If you would like to run this on Manchester University GPU nodes you will need to amend the code as noted below and follow the instructions [here](https://livemanchesterac-my.sharepoint.com/:w:/g/personal/dmitry_nikolaev_manchester_ac_uk/EQVPI6GKWN5LsYQoHkFOItAB05Nv6EeRyZDhzuNjFwPcuw):
 
 * Set the devices
   ```sh
@@ -71,27 +71,27 @@ The code can be run entirely to produce the results for fine-tuning and testing 
 
 
   ```
-The code is currently set up to freeze encoder layers 0 and 1 for BERT. If you would prefer not to freeze them, simply comment out this code:
+The code is currently set up to train all layers of BERT. If you would prefer to freeze encoder layers 0 and 1 for BERT simply uncomment out this code:
 
+* #Experiment with freezing first few layers of the encoder:
  ```sh
- # Experiment with freezing first few layers of the encoder:
- for name, param in encoder.named_parameters():
-    if name.startswith("bert.encoder.layer.0") or name.startswith("bert.encoder.layer.1"):
-        param.requires_grad = False
+ #for name, param in encoder.named_parameters():
+ #    if name.startswith("bert.encoder.layer.0") or name.startswith("bert.encoder.layer.1"):
+ #        param.requires_grad = False
 
- optimizer_parameters = [param for name, param in encoder.named_parameters()
-    if not (name.startswith("bert.encoder.layer.0") or name.startswith("bert.encoder.layer.1"))
- ] + list(clf_head.parameters())
+ #optimizer_parameters = [param for name, param in encoder.named_parameters()
+ #    if not (name.startswith("bert.encoder.layer.0") or name.startswith("bert.encoder.layer.1"))
+ #] + list(clf_head.parameters())
   ```
 ... and amend the optimizer_parameters in the training code block from:
 
 ```sh
-optimiser = torch.optim.AdamW(optimizer_parameters, lr=10**(-5))
+optimiser = torch.optim.AdamW(list(encoder.parameters()) + list(clf_head.parameters()), lr=10**(-5))
   ```
 to:
 
 ```sh
-optimiser = torch.optim.AdamW(list(encoder.parameters()) + list(clf_head.parameters()), lr=10**(-5))
+optimiser = torch.optim.AdamW(optimizer_parameters, lr=10**(-5))
   ```
 
 The code for T5 is currently set up to use a learning rate of 10^(-4). If you would like to vary this rate, simply amend the lr in the below block of code:
