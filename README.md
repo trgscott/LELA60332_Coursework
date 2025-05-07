@@ -105,3 +105,9 @@ The code for T5 is currently set up to use a learning rate of 10^(-4). If you wo
 
   optim = torch.optim.AdamW(model.parameters(), lr=10^(-4))
   ```
+
+<!-- NOTES -->
+## Notes
+
+Due to an error on Github - see [here](https://github.com/orgs/community/discussions/155944) - that requires code outputs to be deleted prior to uploading from Colab, the code outputs have been copied into text boxes in the CL2_Assignment.ipynb file for reference.
+
